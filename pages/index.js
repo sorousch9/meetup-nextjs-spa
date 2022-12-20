@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import Layout from "../components/layout/Layout";
 import MainNavigation from "../components/layout/MainNavigation";
 import MeetupList from "../components/meetups/MeetupList";
 
@@ -33,10 +33,9 @@ const Dummy_data = [
 ];
 const HomePage = () => {
   return (
-    <Fragment>
-      <MainNavigation />
+    <Layout>
       <MeetupList meetups={Dummy_data} />;
-    </Fragment>
+    </Layout>
   );
 };
 
