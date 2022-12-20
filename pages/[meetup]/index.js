@@ -1,8 +1,7 @@
+import MeetupDetail from "../../components/meetups/MeetupDetail";
 
 const index = () => {
-  return (
-    <div>index</div>
-  )
-}
+  return <MeetupDetail />;
+};
 
-export default index
+export default index;

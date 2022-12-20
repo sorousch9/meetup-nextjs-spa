@@ -1,5 +1,3 @@
-import Layout from "../components/layout/Layout";
-import MainNavigation from "../components/layout/MainNavigation";
 import MeetupList from "../components/meetups/MeetupList";
 
 const Dummy_data = [
@@ -32,11 +30,7 @@ const Dummy_data = [
   },
 ];
 const HomePage = () => {
-  return (
-    <Layout>
-      <MeetupList meetups={Dummy_data} />;
-    </Layout>
-  );
+  return <MeetupList meetups={Dummy_data} />;
 };
 
 export default HomePage;
