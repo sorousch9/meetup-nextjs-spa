@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb";
-const dotenv = require("dotenv");
-dotenv.config();
+
 async function handler(req, res) {
   if (req.method === "POST") {
     const data = req.body;

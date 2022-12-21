@@ -1,36 +1,43 @@
 import MeetupList from "../components/meetups/MeetupList";
+import Head from "next/head";
+import { MongoClient } from "mongodb";
+import { Fragment } from "react";
 
-const Dummy_data = [
-  {
-    id: "m1",
-    title: "Düsseldorf",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/D%C3%BCsseldorf_Panorama.jpg/1280px-D%C3%BCsseldorf_Panorama.jpg",
-    address: "Düsseldorf 5. 54879 center",
-    discription:
-      "Mercer's 2012 Quality of Living survey ranked Düsseldorf the sixth most livable city in the world",
-  },
-  {
-    id: "m2",
-    title: "Frankfurt",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Frankfurter_Altstadt_mit_Skyline_2019_%28100MP%29.jpg/1024px-Frankfurter_Altstadt_mit_Skyline_2019_%28100MP%29.jpg",
-    address: "Frankfurt 5. 54879 center",
-    discription:
-      "Frangford am Maa, lit. 'Frank ford on the Main'), is the most populous city in the German state of Hesse.",
-  },
-  {
-    id: "m3",
-    title: "Berlin",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Siegess%C3%A4ule-Berlin-Tiergarten.jpg/1024px-Siegess%C3%A4ule-Berlin-Tiergarten.jpg",
-    address: "Berlin 5. 54879 center",
-    discription:
-      "Berlin straddles the banks of the Spree, which flows into the Havel (a tributary of the Elbe) in the western borough of Spandau",
-  },
-];
-const HomePage = () => {
-  return <MeetupList meetups={Dummy_data} />;
+const HomePage = (props) => {
+  return (
+    <Fragment>
+      <Head>
+        <title>React Meetups</title>
+        <meta
+          name="description"
+          content="Browse a huge list of highly active React meetups!"
+        />
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </Fragment>
+  );
 };
+export async function getStaticProps() {
+  const client = await MongoClient.connect(process.env.MONGO_URL);
+  const db = client.db();
+
+  const meetupsCollection = db.collection("meetups");
+
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
+
+  return {
+    props: {
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString(),
+      })),
+    },
+    revalidate: 1,
+  };
+}
 
 export default HomePage;
